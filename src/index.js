@@ -1,40 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-
-const Square = (props) => {
-  return (
-    <button onClick={() => props.onClick()} className="square">
-      {props.square}
-    </button>
-  );
-};
-
-const Board = (props) => {
-  const renderSquare = (i) => {
-    return <Square square={props.squares[i]} onClick={() => props.handleSquareClick(i)} />;
-  };
-
-  return (
-    <div>
-      <div className="board-row">
-        {renderSquare(0)}
-        {renderSquare(1)}
-        {renderSquare(2)}
-      </div>
-      <div className="board-row">
-        {renderSquare(3)}
-        {renderSquare(4)}
-        {renderSquare(5)}
-      </div>
-      <div className="board-row">
-        {renderSquare(6)}
-        {renderSquare(7)}
-        {renderSquare(8)}
-      </div>
-    </div>
-  );
-};
+import Board from "./Board";
 
 const Game = () => {
   const [history, setHistory] = useState([
@@ -52,7 +19,6 @@ const Game = () => {
   };
 
   const getRowCol = (latestMoveSquare) => {
-    console.log(latestMoveSquare);
     const col = 1 + (latestMoveSquare % 3);
     const row = 1 + Math.floor(latestMoveSquare / 3);
     return [row, col];
@@ -61,6 +27,7 @@ const Game = () => {
   const moves = history.map((val, idx) => {
     const desc = idx ? "Go to move #" + idx : "Go to game start";
     const [row, col] = getRowCol(val.latestMoveSquare);
+
     return (
       <li key={idx}>
         <button onClick={() => jumpTo(idx)}>{desc}</button>
@@ -79,10 +46,10 @@ const Game = () => {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
+
     squares[i] = isNext ? "X" : "O";
     setIsNext(!isNext);
     setStepNumber(gameHistory.length);
-
     setHistory(gameHistory.concat({ squares, latestMoveSquare: i }));
   };
 
