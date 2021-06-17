@@ -63,8 +63,19 @@ const Game = () => {
     const [row, col] = getRowCol(val.latestMoveSquare);
     return (
       <li key={idx}>
-        <button onClick={() => jumpTo(idx)}>{desc}</button>
-        <p>Location was: {`(${row}, ${col})`}</p>
+        {stepNumber === idx ? (
+          <>
+            <button className="bold" onClick={() => jumpTo(idx)}>
+              {desc}
+            </button>
+            <p>Location was: {`(${row}, ${col})`}</p>
+          </>
+        ) : (
+          <>
+            <button onClick={() => jumpTo(idx)}>{desc}</button>
+            <p>Location was: {`(${row}, ${col})`}</p>
+          </>
+        )}
       </li>
     );
   });
