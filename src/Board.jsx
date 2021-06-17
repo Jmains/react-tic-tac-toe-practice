@@ -1,9 +1,17 @@
 import Square from "./Square";
 
 const Board = (props) => {
+  // const val = useContext(GameStateContext);
+  console.log("winning squares: ", props.winningLine);
+
   const renderSquare = (i) => {
     return (
-      <Square key={i} square={props.squares[i]} onClick={() => props.handleSquareClick(i)} />
+      <Square
+        isWinner={props.winningLine && props.winningLine.includes(i)}
+        key={i}
+        square={props.squares[i]}
+        onClick={() => props.handleSquareClick(i)}
+      />
     );
   };
 
