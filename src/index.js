@@ -9,6 +9,7 @@ const Game = () => {
   ]);
   const [stepNumber, setStepNumber] = useState(0);
   const [isNext, setIsNext] = useState(stepNumber % 2 === 0);
+  const [isAscOrder, setIsAscOrder] = useState(true);
 
   let current = history[stepNumber];
   const winner = calculateWinner(current.squares);
@@ -24,28 +25,32 @@ const Game = () => {
     return [row, col];
   };
 
-  const moves = history.map((val, idx) => {
-    const desc = idx ? "Go to move #" + idx : "Go to game start";
+  const moves = history.map((val, moveNum) => {
+    const desc = moveNum ? "Go to move #" + moveNum : "Go to game start";
     const [row, col] = getRowCol(val.latestMoveSquare);
 
     return (
-      <li key={idx}>
-        {stepNumber === idx ? (
+      <li key={moveNum}>
+        {stepNumber === moveNum ? (
           <>
-            <button className="bold" onClick={() => jumpTo(idx)}>
+            <button className="bold" onClick={() => jumpTo(moveNum)}>
               {desc}
             </button>
             <p>Location was: {`(${row}, ${col})`}</p>
           </>
         ) : (
           <>
-            <button onClick={() => jumpTo(idx)}>{desc}</button>
+            <button onClick={() => jumpTo(moveNum)}>{desc}</button>
             <p>Location was: {`(${row}, ${col})`}</p>
           </>
         )}
       </li>
     );
   });
+
+  if (!isAscOrder) {
+    moves.reverse();
+  }
 
   let status = winner ? "Winner is: " + winner : "Next player is: " + (isNext ? "X" : "O");
 
@@ -64,6 +69,10 @@ const Game = () => {
     setHistory(gameHistory.concat({ squares, latestMoveSquare: i }));
   };
 
+  const handleSortToggle = () => {
+    setIsAscOrder(!isAscOrder);
+  };
+
   return (
     <div className="game">
       <div className="game-board">
@@ -71,6 +80,9 @@ const Game = () => {
       </div>
       <div className="game-info">
         <div>{status}</div>
+        <button onClick={() => handleSortToggle()}>
+          {isAscOrder ? "Ascending" : "Descending"}
+        </button>
         <ol>{moves}</ol>
       </div>
     </div>
