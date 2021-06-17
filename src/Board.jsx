@@ -1,9 +1,6 @@
 import Square from "./Square";
 
 const Board = (props) => {
-  // const val = useContext(GameStateContext);
-  console.log("winning squares: ", props.winningLine);
-
   const renderSquare = (i) => {
     return (
       <Square

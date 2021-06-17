@@ -12,7 +12,7 @@ const Game = () => {
   const [isAscOrder, setIsAscOrder] = useState(true);
 
   let current = history[stepNumber];
-  const { winner, winningLine } = calculateWinner(current.squares);
+  const { winner, winningLine, isDraw } = calculateWinner(current.squares);
 
   const jumpTo = (idx) => {
     setStepNumber(idx);
@@ -51,6 +51,9 @@ const Game = () => {
   if (!isAscOrder) moves.reverse();
 
   let status = winner ? "Winner is: " + winner : "Next player is: " + (isNext ? "X" : "O");
+  if (isDraw) {
+    status = "Draw";
+  }
 
   const handleSquareClick = (i) => {
     const gameHistory = history.slice(0, stepNumber + 1);
@@ -93,6 +96,14 @@ const Game = () => {
   );
 };
 
+const checkIsDraw = (squares) => {
+  let size = 0;
+  squares.forEach((val) => {
+    if (val === "X" || val === "O") size++;
+  });
+  return size === squares.length;
+};
+
 const calculateWinner = (squares) => {
   const lines = [
     [0, 1, 2],
@@ -108,10 +119,10 @@ const calculateWinner = (squares) => {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
-      return { winner: squares[a], winningLine: lines[i] };
+      return { winner: squares[a], winningLine: lines[i], isDraw: false };
     }
   }
-  return { winner: null, winningLine: null };
+  return { winner: null, winningLine: null, isDraw: checkIsDraw(squares) };
 };
 
 ReactDOM.render(<Game />, document.getElementById("root"));
